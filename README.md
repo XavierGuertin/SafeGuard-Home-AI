@@ -1,5 +1,5 @@
 # SafeGuard Home AI: Enhancing Elderly Care Through Technology
-<img src="" alt="Logo" width="300"/>
+<img src="images/logo.png" alt="Logo" width="300"/>
 
 [Official Website](LinkToApp)
 
@@ -13,8 +13,6 @@
 3. [Hypothesis](#hypothesis)
 4. [Importance of the Project](#importance-of-the-project)
 5. [Target Audience](#target-audience)
-6. [Feasibility](#feasibility)
-7. [Tools Needed](#tools-needed)
 8. [Team](#team)
 9. [Teacher](#teacher)
 10. [Course](#course)
@@ -42,21 +40,6 @@ The project addresses the critical need for enhanced safety and independence of 
 
 1. Elderly individuals or those with mobility issues seeking to make their homes safer.
 2. Caregivers or family members looking for a reliable system to monitor their loved ones remotely.
-
-## Feasibility
-
-The project's feasibility is supported by our dedicated team, available libraries and frameworks for video processing and recognition, and access to necessary software and hardware for prototyping.
-
-## Tools Needed
-
-- **Software Skills:** AI algorithms, mobile app development, data privacy practices.
-- **Hardware Skills:** IoT devices, sensor integration, wireless communication technologies.
-- **Tools:** Python for AI and machine learning, Firebase for data storage, Vercel for web deployment, and Flutter for mobile app development.
-
-## References
-
-1. Centers for Disease Control and Prevention. "Older Adult Falls Data | Fall Prevention | Injury Center." CDC, 2023.
-2. World Health Organization. "Falls." WHO, 26 April 2021.
 
 ## Team
 
