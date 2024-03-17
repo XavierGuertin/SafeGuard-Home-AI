@@ -1,5 +1,5 @@
 # SafeGuard Home AI: Enhancing Elderly Care Through Technology
-<img src="images/logo.png" alt="Logo" width="300"/>
+<img src="assets/images/logo.png" alt="Logo" width="300"/>
 
 [Official Website](LinkToApp)
 

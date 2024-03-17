@@ -32,7 +32,7 @@ class HomeScreen extends StatelessWidget {
                   ),
                   child: Center(
                     child: Image.asset(
-                      "images/logo.png",
+                      "assets/images/logo.png",
                       scale: 0.8,
                     ),
                   ),
