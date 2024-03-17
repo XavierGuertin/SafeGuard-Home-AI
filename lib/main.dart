@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:safeguard_home_ai/screens/home_screen.dart';
 import 'package:safeguard_home_ai/screens/welcome.dart';
 
 void main() {
