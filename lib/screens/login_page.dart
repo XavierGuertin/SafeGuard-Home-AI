@@ -1,5 +1,6 @@
 import 'package:safeguard_home_ai/Animations/FadeAnimation.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -10,6 +11,24 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   bool isPasswordVisible = false;
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+
+  Future<UserCredential> signInWithFirebase(String email, String password) async {
+    FirebaseAuth auth = FirebaseAuth.instance;
+    UserCredential userCredential = await auth.signInWithEmailAndPassword(
+      email: email,
+      password: password,
+    );
+    return userCredential;
+  }
+
+  @override
+  void dispose() {
+    emailController.dispose();
+    passwordController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -39,11 +58,12 @@ class _LoginPageState extends State<LoginPage> {
                         border: Border(bottom: BorderSide(color: Color(0xFF373A3F)))
                     ),
                     child: const TextField(
+                      controller: emailController,
                       style: TextStyle(color: Colors.white),
                       decoration: InputDecoration(
-                          border: InputBorder.none,
-                          hintStyle: TextStyle(color: Color(0xFF5C5F65)),
-                          hintText: "Email or Phone number"
+                        border: InputBorder.none,
+                        hintStyle: TextStyle(color: Color(0xFF5C5F65)),
+                        hintText: "Email or Phone number",
                       ),
                     ),
                   ),
@@ -52,19 +72,20 @@ class _LoginPageState extends State<LoginPage> {
                     decoration: const BoxDecoration(
                     ),
                     child: TextField(
+                      controller: passwordController,
                       obscureText: !isPasswordVisible,
                       style: const TextStyle(color: Colors.white),
                       decoration: InputDecoration(
-                          border: InputBorder.none,
-                          hintStyle: const TextStyle(color: Color(0xFF5C5F65)),
-                          suffixIcon: InkWell(
-                              onTap: () {
-                                setState(() {
-                                  isPasswordVisible = !isPasswordVisible;
-                                });
-                              },
-                              child: const Icon(Icons.remove_red_eye, color: Color(0xFF5C5F65),)),
-                          hintText: "Password"
+                        border: InputBorder.none,
+                        hintStyle: const TextStyle(color: Color(0xFF5C5F65)),
+                        suffixIcon: InkWell(
+                            onTap: () {
+                              setState(() {
+                                isPasswordVisible = !isPasswordVisible;
+                              });
+                            },
+                            child: const Icon(Icons.remove_red_eye, color: Color(0xFF5C5F65),)),
+                        hintText: "Password",
                       ),
                     ),
                   ),
@@ -82,7 +103,16 @@ class _LoginPageState extends State<LoginPage> {
             const SizedBox(height: 20,),
             FadeAnimation(1.8, Center(
               child: MaterialButton(
-                onPressed: () {},
+                onPressed: () async {
+                  try {
+                    UserCredential userCredential = await signInWithFirebase(emailController.text, passwordController.text);
+                    if (userCredential.user != null) {
+                      Navigator.pushNamed(context, '/dashboard');
+                    }
+                  } catch (e) {
+                    print(e);
+                  }
+                },
                 color: const Color(0xAA3A5BDA),
                 padding: const EdgeInsets.all(16),
                 shape: RoundedRectangleBorder(
