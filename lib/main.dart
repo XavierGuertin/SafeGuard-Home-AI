@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:safeguard_home_ai/screens/welcome.dart';
+import 'package:safeguard_home_ai/screens/home_page.dart';
 
 void main() {
   runApp(const MyApp());
@@ -16,7 +16,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         scaffoldBackgroundColor: Colors.white,
       ),
-      home: Welcome(),
+      home: HomePage(),
     );
   }
 }
