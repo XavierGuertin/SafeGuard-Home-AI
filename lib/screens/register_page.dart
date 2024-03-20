@@ -3,33 +3,56 @@ import 'package:safeguard_home_ai/Animations/FadeAnimation.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:safeguard_home_ai/screens/dashboard.dart';
-import 'package:safeguard_home_ai/screens/register_page.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
-class LoginPage extends StatefulWidget {
-  const LoginPage({super.key});
+class RegisterPage extends StatefulWidget {
+  const RegisterPage({super.key});
 
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  State<RegisterPage> createState() => _RegisterPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _RegisterPageState extends State<RegisterPage> {
   bool isPasswordVisible = false;
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+  final TextEditingController usernameController = TextEditingController();
 
-  Future<UserCredential> signInWithFirebase(String email, String password) async {
+
+  Future<UserCredential?> registerWithFirebase(String email, String password, String username) async {
     FirebaseAuth auth = FirebaseAuth.instance;
-    UserCredential userCredential = await auth.signInWithEmailAndPassword(
-      email: email,
-      password: password,
-    );
-    return userCredential;
+    FirebaseFirestore firestore = FirebaseFirestore.instance;
+    try {
+      UserCredential userCredential = await auth.createUserWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+
+      await firestore.collection('users').doc(userCredential.user?.uid).set({
+        'username': username,
+        'email': email,
+      });
+
+      Navigator.pushReplacement(
+          context,
+          PageTransition(
+              type: PageTransitionType.fade, child: const Dashboard()
+          )
+      );
+
+      return userCredential;
+    } catch (e) {
+      print(e);
+    }
+
+    return null;
   }
 
   @override
   void dispose() {
     emailController.dispose();
     passwordController.dispose();
+    usernameController.dispose(); // Dispose new controller
     super.dispose();
   }
 
@@ -43,7 +66,7 @@ class _LoginPageState extends State<LoginPage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            FadeAnimation(1.2, const Text("Let's sign you in.",
+            FadeAnimation(1.2, const Text("Let's get you registered.",
               style: TextStyle(color: Colors.white, fontSize: 30, fontWeight: FontWeight.bold),)),
             const SizedBox(height: 30,),
             FadeAnimation(1.5, Container(
@@ -61,7 +84,22 @@ class _LoginPageState extends State<LoginPage> {
                         border: Border(bottom: BorderSide(color: Color(0xFF373A3F)))
                     ),
                     child: TextField(
-                      controller: emailController,
+                      controller: usernameController,
+                      style: const TextStyle(color: Colors.white),
+                      decoration: const InputDecoration(
+                        border: InputBorder.none,
+                        hintStyle: TextStyle(color: Color(0xFF5C5F65)),
+                        hintText: "Full Name",
+                      ),
+                    ),
+                  ),
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                    decoration: const BoxDecoration(
+                        border: Border(bottom: BorderSide(color: Color(0xFF373A3F)))
+                    ),
+                    child: TextField(
+                      controller: emailController, // New TextField
                       style: const TextStyle(color: Colors.white),
                       decoration: const InputDecoration(
                         border: InputBorder.none,
@@ -96,36 +134,17 @@ class _LoginPageState extends State<LoginPage> {
               ),
             )),
             const SizedBox(height: 40,),
-            FadeAnimation(1.6, Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const Text("Don't have an account?", style: TextStyle(color: Color(0xFF5C5F65)),),
-                const SizedBox(width: 6,),
-                TextButton(
-                    onPressed: () {
-                      Navigator.pushReplacement(
-                          context,
-                          PageTransition(
-                              type: PageTransitionType.fade, child: const RegisterPage()
-                          )
-                      );
-                    },
-                    child: const Text("Register", style: TextStyle(color: Colors.blue ),)
-                )
-              ],
-            )),
-            const SizedBox(height: 20,),
             FadeAnimation(1.8, Center(
               child: MaterialButton(
                 onPressed: () async {
                   try {
-                    UserCredential userCredential = await signInWithFirebase(emailController.text, passwordController.text);
-                    if (userCredential.user != null) {
+                    UserCredential? userCredential = await registerWithFirebase(emailController.text, passwordController.text, usernameController.text);
+                    if (userCredential?.user != null) {
                       Navigator.push(
                           context,
                           PageTransition(
                               type: PageTransitionType.fade, child: const Dashboard()));
-                          print("User is logged in");
+                      print("User is registered");
                     }
                   } catch (e) {
                     print(e);
@@ -136,7 +155,7 @@ class _LoginPageState extends State<LoginPage> {
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(8)
                 ),
-                child: Center(child: Text("Login", style: TextStyle(color: Colors.white.withOpacity(.7), fontSize: 16),)),
+                child: Center(child: Text("Register", style: TextStyle(color: Colors.white.withOpacity(.7), fontSize: 16),)),
               ),
             )),
           ],
