@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:safeguard_home_ai/screens/dashboard.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:quickalert/quickalert.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
@@ -33,12 +34,17 @@ class _RegisterPageState extends State<RegisterPage> {
         'email': email,
       });
 
-      Navigator.pushReplacement(
-          context,
-          PageTransition(
-              type: PageTransitionType.fade, child: const Dashboard()
-          )
-      );
+      QuickAlert.show(
+        context: context,
+        type: QuickAlertType.success,
+        text: 'User Registered Successfully!',
+        showConfirmBtn: true,
+      ).then((value) {
+        Navigator.push(
+            context,
+            PageTransition(
+                type: PageTransitionType.fade, child: const Dashboard()));
+      });
 
       return userCredential;
     } catch (e) {

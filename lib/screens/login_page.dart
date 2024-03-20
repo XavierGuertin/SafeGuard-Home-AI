@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:safeguard_home_ai/screens/dashboard.dart';
 import 'package:safeguard_home_ai/screens/register_page.dart';
+import 'package:quickalert/quickalert.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -121,11 +122,19 @@ class _LoginPageState extends State<LoginPage> {
                   try {
                     UserCredential userCredential = await signInWithFirebase(emailController.text, passwordController.text);
                     if (userCredential.user != null) {
-                      Navigator.push(
-                          context,
-                          PageTransition(
-                              type: PageTransitionType.fade, child: const Dashboard()));
-                          print("User is logged in");
+                      QuickAlert.show(
+                        context: context,
+                        type: QuickAlertType.success,
+                        text: 'Signed In Successfully!',
+                        showConfirmBtn: true,
+                      ).then((value) {
+                        Navigator.push(
+                            context,
+                            PageTransition(
+                                type: PageTransitionType.fade, child: const Dashboard()));
+                      });
+
+                      print("User is logged in");
                     }
                   } catch (e) {
                     print(e);
