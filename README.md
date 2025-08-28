@@ -2,6 +2,7 @@
 <img src="assets/images/logo.png" alt="Logo" width="300"/>
 
 [Official Website](LinkToApp)
+[Demo](https://www.youtube.com/watch?v=cG0vkpDBkyw)
 
 [![Build Status](https://img.shields.io/badge/build-passing-brightgreen)](link_to_build_status)
 [![License](https://img.shields.io/badge/license-MIT-blue)](link_to_license)
